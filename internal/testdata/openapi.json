@@ -1,0 +1,19 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Test API",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/ping": {
+      "get": {
+        "summary": "Ping",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    }
+  }
+}

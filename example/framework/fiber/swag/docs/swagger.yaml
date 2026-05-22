@@ -1,0 +1,78 @@
+basePath: /api
+definitions:
+  main.CreateUserRequest:
+    properties:
+      email:
+        example: alice@example.com
+        type: string
+      name:
+        example: Alice
+        type: string
+    required:
+    - email
+    - name
+    type: object
+  main.User:
+    properties:
+      email:
+        example: alice@example.com
+        type: string
+      id:
+        example: "1"
+        type: string
+      name:
+        example: Alice
+        type: string
+    type: object
+host: localhost:8000
+info:
+  contact: {}
+  description: This is a sample API using Fiber and Swag
+  title: Coco Demo API
+  version: "1.0"
+paths:
+  /users:
+    get:
+      consumes:
+      - application/json
+      description: Get all users
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/main.User'
+            type: array
+      summary: List all users
+      tags:
+      - Users
+    post:
+      consumes:
+      - application/json
+      description: Create a new user with the input payload
+      parameters:
+      - description: Create user
+        in: body
+        name: user
+        required: true
+        schema:
+          $ref: '#/definitions/main.CreateUserRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/main.User'
+        "400":
+          description: Bad Request
+          schema:
+            additionalProperties:
+              type: string
+            type: object
+      summary: Create a new user
+      tags:
+      - Users
+swagger: "2.0"

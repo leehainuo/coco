@@ -1,0 +1,28 @@
+{
+  "$schema": "https://json.schemastore.org/prettierrc",
+  "semi": false,
+  "singleQuote": true,
+  "trailingComma": "es5",
+  "printWidth": 120,
+  "tabWidth": 2,
+  "useTabs": false,
+  "arrowParens": "always",
+  "endOfLine": "lf",
+  "bracketSpacing": true,
+  "bracketSameLine": false,
+  "proseWrap": "preserve",
+  "quoteProps": "as-needed",
+  "vueIndentScriptAndStyle": false,
+  "htmlWhitespaceSensitivity": "ignore",
+  "singleAttributePerLine": false,
+  "embeddedLanguageFormatting": "auto",
+  "plugins": ["prettier-plugin-tailwindcss"],
+  "overrides": [
+    {
+      "files": "*.vue",
+      "options": {
+        "parser": "vue"
+      }
+    }
+  ]
+}

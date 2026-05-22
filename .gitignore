@@ -1,0 +1,58 @@
+# Binaries for programs and plugins
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+
+# Test binary, built with `go test -c`
+*.test
+
+# Output of the go coverage tool
+*.out
+coverage.txt
+coverage.html
+
+# Dependency directories
+vendor/
+
+# Go workspace file
+go.work
+go.work.sum
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# IDEs and editors
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Frontend
+/frontend/node_modules/
+/frontend/dist/
+/frontend/.vite/
+/frontend/.turbo/
+
+# Build artifacts
+/dist/
+/build/
+/bin/
+
+# Temporary files
+*.tmp
+*.log
+*.pid
+*.seed
+*.pid.lock
+
+# OS generated files
+Thumbs.db
+.AppleDouble
+.LSOverride
+
