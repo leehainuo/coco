@@ -14,6 +14,13 @@
 
 </div>
 
+## Preview
+
+<p align="center">
+  <img src="docs/images/coco-light.png" alt="Coco Light Theme" width="45%">
+  <img src="docs/images/coco-dark.png" alt="Coco Dark Theme" width="45%">
+</p>
+
 ## What is Coco?
 
 English | [简体中文](docs/zh/README.md)

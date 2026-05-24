@@ -14,6 +14,13 @@
 
 </div>
 
+## 效果展示
+
+<p align="center">
+  <img src="../images/coco-light.png" alt="Coco 亮色主题" width="45%">
+  <img src="../images/coco-dark.png" alt="Coco 暗色主题" width="45%">
+</p>
+
 ## 什么是 Coco？
 
 [English](../../README.md) | 简体中文
