@@ -92,6 +92,41 @@ go run main.go
 
 ---
 
+### 5. Custom i18n - 自定义语言加载
+
+**位置：** `cmd/i18n/main.go`
+
+**端口：** 8000
+
+**特点：**
+- 通过 `coco.I18n("i18n.json")` 传入自定义翻译文件（示例为法语）
+- 在内置的中文 / 英文之外新增一种可选语言
+- `coco.Lang("custom")` 将其设为初始语言，可在语言切换器中随时切换
+- 适合需要英文/中文以外语言的全球化场景
+
+**运行：**
+```bash
+cd cmd/i18n
+go run main.go
+```
+
+**访问：** http://localhost:8000/docs/
+
+**i18n.json 结构：**
+```json
+{
+  "name": "Français",
+  "messages": {
+    "search": "Recherche",
+    "loading": "Chargement...",
+    "...": "..."
+  }
+}
+```
+`name` 为语言切换器中显示的名称，`messages` 为翻译键值表；缺失的键会自动回退到英文。
+
+---
+
 ## 配置选项示例
 
 所有示例都支持以下配置选项：
@@ -100,7 +135,8 @@ go run main.go
 coco.New(specPath,
     coco.Title("自定义标题"),           // 设置文档标题
     coco.Theme("dark"),               // 主题：auto/light/dark
-    coco.Lang("zh"),                  // 语言：en/zh
+    coco.Lang("zh"),                  // 语言：en/zh/custom
+    coco.I18n("i18n.json"),           // 加载自定义翻译文件（新增语言）
     coco.EnableDebug(true),           // 启用调试模式
     coco.EnableExport(true),          // 启用导出功能
     coco.EnableHistory(true),         // 启用历史记录
@@ -119,8 +155,12 @@ example/basic/
 │   │   └── openapi.json
 │   ├── local/           # 本地文件示例
 │   │   └── main.go
-│   └── nethttp/         # 纯标准库示例
-│       └── main.go
+│   ├── nethttp/         # 纯标准库示例
+│   │   └── main.go
+│   └── i18n/            # 自定义语言示例
+│       ├── main.go
+│       ├── openapi.json
+│       └── i18n.json
 ├── pkg/                 # 共享的 API 实现
 │   └── api.go
 └── README.md
@@ -146,6 +186,9 @@ cd cmd/local && go run main.go
 
 # 或运行纯标准库示例
 cd cmd/nethttp && go run main.go
+
+# 或运行自定义语言示例
+cd cmd/i18n && go run main.go
 ```
 
 3. **在浏览器中访问对应的文档地址**

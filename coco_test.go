@@ -144,6 +144,38 @@ func TestOption_Lang(t *testing.T) {
 	}
 }
 
+func TestOption_I18n(t *testing.T) {
+	t.Parallel()
+
+	var c config.Config
+	I18n("./i18n.fr.json")(&c)
+	if c.I18nPath != "./i18n.fr.json" {
+		t.Errorf("I18nPath = %q, want %q", c.I18nPath, "./i18n.fr.json")
+	}
+}
+
+func TestOption_I18nData(t *testing.T) {
+	t.Parallel()
+
+	data := []byte(`{"name":"Français","messages":{"search":"Recherche"}}`)
+	var c config.Config
+	I18nData(data)(&c)
+	if string(c.I18nData) != string(data) {
+		t.Errorf("I18nData = %q, want %q", c.I18nData, data)
+	}
+}
+
+func TestOption_I18nURL(t *testing.T) {
+	t.Parallel()
+
+	url := "https://example.com/i18n.json"
+	var c config.Config
+	I18nURL(url)(&c)
+	if c.I18nURL != url {
+		t.Errorf("I18nURL = %q, want %q", c.I18nURL, url)
+	}
+}
+
 func TestOption_EnableDebug(t *testing.T) {
 	t.Parallel()
 
@@ -260,6 +292,62 @@ func TestNew_ServeConfigJSON(t *testing.T) {
 	}
 	if m["theme"] != "light" {
 		t.Errorf("theme = %v, want %q", m["theme"], "light")
+	}
+}
+
+func TestNew_ServeConfigJSONWithCustomI18n(t *testing.T) {
+	t.Parallel()
+
+	h := New("",
+		Spec([]byte(`{}`)),
+		I18nData([]byte(`{"name":"Français","messages":{"search":"Recherche"}}`)),
+	)
+
+	req := httptest.NewRequest(http.MethodGet, "/config.json", nil)
+	w := httptest.NewRecorder()
+	h.ServeHTTP(w, req)
+
+	var m map[string]any
+	if err := json.Unmarshal(w.Body.Bytes(), &m); err != nil {
+		t.Fatalf("failed to parse: %v", err)
+	}
+
+	if m["enableCustomI18n"] != true {
+		t.Errorf("enableCustomI18n = %v, want true", m["enableCustomI18n"])
+	}
+}
+
+func TestNew_ServeI18nJSON(t *testing.T) {
+	t.Parallel()
+
+	payload := `{"name":"Français","messages":{"search":"Recherche"}}`
+	h := New("", Spec([]byte(`{}`)), I18nData([]byte(payload)))
+
+	req := httptest.NewRequest(http.MethodGet, "/i18n.json", nil)
+	w := httptest.NewRecorder()
+	h.ServeHTTP(w, req)
+
+	if w.Code != http.StatusOK {
+		t.Fatalf("status = %d, want %d", w.Code, http.StatusOK)
+	}
+
+	got := strings.TrimSpace(w.Body.String())
+	if got != payload {
+		t.Errorf("body = %q, want %q", got, payload)
+	}
+}
+
+func TestNew_ServeI18nJSONNotConfigured(t *testing.T) {
+	t.Parallel()
+
+	h := New("", Spec([]byte(`{}`)))
+
+	req := httptest.NewRequest(http.MethodGet, "/i18n.json", nil)
+	w := httptest.NewRecorder()
+	h.ServeHTTP(w, req)
+
+	if w.Code != http.StatusNotFound {
+		t.Errorf("status = %d, want %d", w.Code, http.StatusNotFound)
 	}
 }
 

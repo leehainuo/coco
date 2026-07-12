@@ -21,12 +21,14 @@
       :version="spec?.info?.version ?? ''"
       :dark="dark"
       :locale="locale"
+      :has-custom="hasCustom"
+      :custom-name="customName"
       :mobile-open="isDrawerOpen"
       :settings-open="isSettingsOpen"
       @select="onSelect"
       @toggle-dark="onToggleDark()"
       @close-mobile="isDrawerOpen = false"
-      @toggle-lang="setLocale(locale === 'zh' ? 'en' : 'zh')"
+      @select-lang="setLocale($event)"
       @open-settings="onOpenSettings"
     />
 
@@ -72,7 +74,7 @@ import type { OpenAPISpec, Endpoint, Tag } from '@/shared/types'
 import darkBg from '@/assets/dark-bg.webp'
 import lightBg from '@/assets/light-bg.webp'
 
-const { t, locale, setLocale } = useLocale()
+const { t, locale, setLocale, loadCustomMessages, hasCustom, customName } = useLocale()
 
 const spec = ref<OpenAPISpec | null>(null)
 const loading = ref(true)
@@ -84,6 +86,7 @@ const config = ref({
   enableDebug: true,
   enableExport: true,
   enableHistory: true,
+  enableCustomI18n: false,
 })
 const saved = localStorage.getItem('coco:theme')
 const dark = ref(saved === 'dark')
@@ -175,7 +178,11 @@ const all = computed<Endpoint[]>(() => {
 
 onMounted(async () => {
   try {
-    const [cfg, s] = await Promise.all([fetch(url('config.json')).catch(() => null), fetch(url('openapi.json'))])
+    const [cfg, i18nRes, s] = await Promise.all([
+      fetch(url('config.json')).catch(() => null),
+      fetch(url('i18n.json')).catch(() => null),
+      fetch(url('openapi.json')),
+    ])
     if (cfg?.ok) {
       try {
         const c = await cfg.json()
@@ -184,6 +191,7 @@ onMounted(async () => {
         config.value.enableDebug = c.enableDebug ?? true
         config.value.enableExport = c.enableExport ?? true
         config.value.enableHistory = c.enableHistory ?? true
+        config.value.enableCustomI18n = c.enableCustomI18n ?? false
         if (!saved) {
           if (c.theme === 'dark') dark.value = true
           else if (c.theme === 'light') dark.value = false
@@ -194,6 +202,14 @@ onMounted(async () => {
       }
     } else if (!saved) {
       dark.value = window.matchMedia?.('(prefers-color-scheme: dark)').matches ?? false
+    }
+    if (i18nRes?.ok) {
+      try {
+        const registered = loadCustomMessages(await i18nRes.json())
+        if (registered && localStorage.getItem('coco:lang') === 'custom') setLocale('custom', false)
+      } catch {
+        // Ignore malformed i18n.json; fall back to built-in languages.
+      }
     }
     if (!s.ok) throw new Error(`HTTP ${s.status}`)
     spec.value = await s.json()

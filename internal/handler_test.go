@@ -351,3 +351,62 @@ func TestCatchAll_NestedAssetsPath(t *testing.T) {
 		t.Fatalf("status = %d, want %d for nested asset path", w.Code, http.StatusOK)
 	}
 }
+
+func TestI18nJSON_NotConfigured(t *testing.T) {
+	t.Parallel()
+
+	h := newTestHandler(config.Config{
+		Spec: config.Spec{Data: []byte(`{}`)},
+	})
+
+	req := httptest.NewRequest(http.MethodGet, "/i18n.json", nil)
+	w := httptest.NewRecorder()
+	h.ServeHTTP(w, req)
+
+	if w.Code != http.StatusNotFound {
+		t.Errorf("status = %d, want %d", w.Code, http.StatusNotFound)
+	}
+}
+
+func TestI18nJSON_Configured(t *testing.T) {
+	t.Parallel()
+
+	payload := `{"name":"Français","messages":{"search":"Recherche"}}`
+	h := newTestHandler(config.Config{
+		Spec: config.Spec{Data: []byte(`{}`)},
+		UI:   config.UI{I18n: config.I18n{I18nData: []byte(payload)}},
+	})
+
+	req := httptest.NewRequest(http.MethodGet, "/i18n.json", nil)
+	w := httptest.NewRecorder()
+	h.ServeHTTP(w, req)
+
+	if w.Code != http.StatusOK {
+		t.Fatalf("status = %d, want %d", w.Code, http.StatusOK)
+	}
+	body, _ := io.ReadAll(w.Body)
+	if string(body) != payload {
+		t.Errorf("body = %q, want %q", body, payload)
+	}
+}
+
+func TestConfigJSON_EnableCustomI18n(t *testing.T) {
+	t.Parallel()
+
+	h := newTestHandler(config.Config{
+		Spec: config.Spec{Data: []byte(`{}`)},
+		UI:   config.UI{I18n: config.I18n{I18nData: []byte(`{}`)}},
+	})
+
+	req := httptest.NewRequest(http.MethodGet, "/config.json", nil)
+	w := httptest.NewRecorder()
+	h.ServeHTTP(w, req)
+
+	var m map[string]any
+	if err := json.Unmarshal(w.Body.Bytes(), &m); err != nil {
+		t.Fatalf("failed to parse JSON: %v", err)
+	}
+	if m["enableCustomI18n"] != true {
+		t.Errorf("enableCustomI18n = %v, want true", m["enableCustomI18n"])
+	}
+}

@@ -241,3 +241,81 @@ func TestLoadSpec_InlineDataSkipsOnce(t *testing.T) {
 		t.Errorf("file: got %q, want %q", got2, fileData)
 	}
 }
+
+func TestLoadI18n_InlineData(t *testing.T) {
+	t.Parallel()
+
+	data := []byte(`{"name":"Français","messages":{"search":"Recherche"}}`)
+	il := &i18nLoader{}
+	c := config.Config{
+		UI: config.UI{I18n: config.I18n{I18nData: data, I18nPath: "/should/be/ignored"}},
+	}
+
+	got, err := il.loadI18n(c)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if string(got) != string(data) {
+		t.Errorf("got %q, want %q", got, data)
+	}
+}
+
+func TestLoadI18n_FromFile(t *testing.T) {
+	t.Parallel()
+
+	content := []byte(`{"name":"日本語","messages":{"search":"検索"}}`)
+	dir := t.TempDir()
+	path := filepath.Join(dir, "i18n.json")
+	if err := os.WriteFile(path, content, 0644); err != nil {
+		t.Fatalf("failed to write temp file: %v", err)
+	}
+
+	il := &i18nLoader{}
+	c := config.Config{
+		UI: config.UI{I18n: config.I18n{I18nPath: path}},
+	}
+
+	got, err := il.loadI18n(c)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if string(got) != string(content) {
+		t.Errorf("got %q, want %q", got, content)
+	}
+}
+
+func TestLoadI18n_FromURL(t *testing.T) {
+	t.Parallel()
+
+	payload := `{"name":"Deutsch","messages":{"search":"Suche"}}`
+	ts := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		w.Header().Set("Content-Type", "application/json")
+		w.Write([]byte(payload))
+	}))
+	defer ts.Close()
+
+	il := &i18nLoader{}
+	c := config.Config{
+		UI: config.UI{I18n: config.I18n{I18nURL: ts.URL}},
+	}
+
+	got, err := il.loadI18n(c)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	if string(got) != payload {
+		t.Errorf("got %q, want %q", got, payload)
+	}
+}
+
+func TestI18nConfigured(t *testing.T) {
+	t.Parallel()
+
+	il := &i18nLoader{}
+	if il.configured(config.Config{}) {
+		t.Error("expected not configured for empty config")
+	}
+	if !il.configured(config.Config{UI: config.UI{I18n: config.I18n{I18nPath: "x.json"}}}) {
+		t.Error("expected configured when path is set")
+	}
+}

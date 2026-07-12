@@ -10,7 +10,7 @@ export type Theme = 'light' | 'dark'
 /**
  * Locale type
  */
-export type Locale = 'zh' | 'en'
+export type Locale = 'zh' | 'en' | 'custom'
 
 /**
  * Application configuration interface

@@ -24,7 +24,12 @@
       </div> -->
 
       <span class="text-sidebar-primary-foreground flex-1 truncate text-sm font-semibold">{{ title }}</span>
-      <LangToggle :locale="locale" @toggle="$emit('toggle-lang')" />
+      <LangToggle
+        :locale="locale"
+        :has-custom="hasCustom"
+        :custom-name="customName"
+        @select="$emit('select-lang', $event)"
+      />
       <ThemeToggle :dark="dark" @toggle="$emit('toggle-dark')" />
       <CloseToggle @toggle="$emit('close-mobile')" />
     </div>
@@ -108,11 +113,13 @@ const props = defineProps({
   version: { type: String, default: '' },
   dark: { type: Boolean, default: false },
   locale: { type: String, default: 'zh' },
+  hasCustom: { type: Boolean, default: false },
+  customName: { type: String, default: '' },
   mobileOpen: { type: Boolean, default: false },
   settingsOpen: { type: Boolean, default: false },
 })
 
-defineEmits(['select', 'toggle-dark', 'toggle-lang', 'close-mobile', 'open-settings'])
+defineEmits(['select', 'toggle-dark', 'select-lang', 'close-mobile', 'open-settings'])
 
 const { t } = useLocale()
 const { settings } = useSettings()
