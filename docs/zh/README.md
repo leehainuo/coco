@@ -295,8 +295,11 @@ coco.Title("我的 API 文档")
 // 设置主题: "light", "dark", "auto"
 coco.Theme("dark")
 
-// 设置语言: "en", "zh"
+// 设置语言: "en", "zh", "custom"
 coco.Lang("zh")
+
+// 从翻译文件添加自定义语言（可选）
+coco.I18n("./i18n.fr.json")
 ```
 
 ### 功能开关
@@ -401,8 +404,13 @@ swag init
 
 - `en` - English（默认）
 - `zh` - 中文
+- `custom` - 从你自己的 `i18n.json` 加载的自定义语言
 
 用户可以在界面右上角随时切换主题和语言。
+
+如需在内置中英文之外新增语言，可通过 `coco.I18n`（文件）、`coco.I18nData`（字节）
+或 `coco.I18nURL`（URL）提供翻译文件，再用 `coco.Lang("custom")` 选中它。详见
+[配置指南](./02-configuration.md)。
 
 ## 完整示例
 

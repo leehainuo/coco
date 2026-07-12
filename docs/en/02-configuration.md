@@ -51,17 +51,52 @@ coco.Theme("auto")  // Follow system (default)
 Set the interface language:
 
 ```go
-coco.Lang("en") // English
-coco.Lang("zh") // Chinese
+coco.Lang("en")     // English
+coco.Lang("zh")     // Chinese
+coco.Lang("custom") // Custom language (see below)
 ```
 
 **Available values**:
 - `"en"` - English
 - `"zh"` - Chinese
+- `"custom"` - A custom language loaded via `coco.I18n` / `coco.I18nData` / `coco.I18nURL`
 
 **Default**: `"en"`
 
 **Note**: Users can switch languages anytime in the top-right corner.
+
+### Custom Language (i18n)
+
+Besides the built-in English and Chinese, you can add a third language by
+providing your own translation file. Register it with one of the following
+options, then select it via `coco.Lang("custom")`:
+
+```go
+coco.I18n("./i18n.fr.json")                     // from a local file
+coco.I18nData(frI18n)                           // from in-memory bytes
+coco.I18nURL("https://cdn.example.com/i18n.fr.json") // from a remote URL
+```
+
+The translation file is a JSON object of the following shape:
+
+```json
+{
+  "name": "Français",
+  "messages": {
+    "search": "Recherche",
+    "loading": "Chargement...",
+    "response": "Réponse"
+  }
+}
+```
+
+- `name` - The label shown in the language switcher.
+- `messages` - A flat map of translation keys to localized strings.
+
+**Notes**:
+- Missing keys automatically fall back to English.
+- When no custom language is configured, the switcher only shows English and Chinese.
+- Set `coco.Lang("custom")` to make the custom language the initial one; otherwise users can pick it from the switcher.
 
 ## Specification Configuration
 
@@ -125,6 +160,105 @@ handler := coco.New("",
 - Ensure URL is accessible
 - Consider network latency and availability
 - Use local files or embedded method in production
+
+## Translation Configuration
+
+A custom language is loaded from a translation file. Like the specification,
+it can come from three sources, resolved in this priority: in-memory bytes,
+then remote URL, then local file.
+
+### Load from File
+
+Load the translation file from the local filesystem:
+
+```go
+handler := coco.New("./openapi.json",
+    coco.I18n("./i18n.fr.json"),
+    coco.Lang("custom"),
+)
+```
+
+**Use cases**:
+- Local development, where you edit the translation file without recompiling
+- The translation file ships next to the binary
+
+### Load from Byte Array
+
+Pass translation bytes that already live in memory:
+
+```go
+handler := coco.New("./openapi.json",
+    coco.I18nData(frI18n),
+    coco.Lang("custom"),
+)
+```
+
+`I18nData` accepts any `[]byte`, so the source is up to you:
+
+**Example - Using embed** (single self-contained binary):
+```go
+import _ "embed"
+
+//go:embed i18n.fr.json
+var frI18n []byte
+
+func main() {
+    handler := coco.New("./openapi.json",
+        coco.I18nData(frI18n),
+        coco.Lang("custom"),
+    )
+    // ...
+}
+```
+
+**Example - Using an inline Go string** (no external file at all):
+```go
+const frI18n = `{
+    "name": "Français",
+    "messages": {
+        "search": "Recherche",
+        "loading": "Chargement..."
+    }
+}`
+
+handler := coco.New("./openapi.json",
+    coco.I18nData([]byte(frI18n)),
+    coco.Lang("custom"),
+)
+```
+
+**Example - Built at runtime** (e.g. loaded from a database):
+```go
+payload, _ := json.Marshal(map[string]any{
+    "name":     "Français",
+    "messages": messagesFromDB, // map[string]string
+})
+
+handler := coco.New("./openapi.json",
+    coco.I18nData(payload),
+    coco.Lang("custom"),
+)
+```
+
+**Use cases**:
+- Embed the translation file with Go `embed` for zero external dependencies
+- Define the JSON directly as a Go string constant
+- Generate translations dynamically or load them from a database / config center
+
+### Load from Remote URL
+
+Fetch the translation file from a remote server:
+
+```go
+handler := coco.New("./openapi.json",
+    coco.I18nURL("https://cdn.example.com/i18n.fr.json"),
+    coco.Lang("custom"),
+)
+```
+
+**Use cases**:
+- Translations hosted on a CDN, object storage, or config center
+- Multiple services sharing and updating one translation file centrally
 
 ## Feature Toggles
 

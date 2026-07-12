@@ -5,4 +5,5 @@ export interface AppConfig {
   enableDebug: boolean
   enableExport: boolean
   enableHistory: boolean
+  enableCustomI18n: boolean
 }

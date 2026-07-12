@@ -19,6 +19,10 @@ func New(c config.Config) http.Handler {
 	server := http.FileServer(http.FS(distFS))
 
 	mux := http.NewServeMux()
+
+	i18n := &i18nLoader{}
+	loader := &specLoader{}
+
 	mux.HandleFunc("/config.json", func(w http.ResponseWriter, r *http.Request) {
 		lang := c.Lang
 		if lang == "" {
@@ -30,19 +34,19 @@ func New(c config.Config) http.Handler {
 		}
 
 		c := map[string]any{
-			"title":         c.Title,
-			"lang":          lang,
-			"theme":         theme,
-			"enableDebug":   c.Debug,
-			"enableExport":  c.Export,
-			"enableHistory": c.History,
+			"title":            c.Title,
+			"lang":             lang,
+			"theme":            theme,
+			"enableDebug":      c.Debug,
+			"enableExport":     c.Export,
+			"enableHistory":    c.History,
+			"enableCustomI18n": i18n.configured(c),
 		}
 
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
 		_ = json.NewEncoder(w).Encode(c)
 	})
 
-	loader := &specLoader{}
 	specHandler := func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json; charset=utf-8")
 
@@ -57,6 +61,22 @@ func New(c config.Config) http.Handler {
 
 	mux.HandleFunc("/openapi.json", specHandler)
 	mux.HandleFunc("/swagger.json", specHandler)
+
+	mux.HandleFunc("/i18n.json", func(w http.ResponseWriter, r *http.Request) {
+		if !i18n.configured(c) {
+			http.NotFound(w, r)
+			return
+		}
+
+		data, err := i18n.loadI18n(c)
+		if err != nil {
+			http.Error(w, "failed to load i18n: "+err.Error(), http.StatusInternalServerError)
+			return
+		}
+
+		w.Header().Set("Content-Type", "application/json; charset=utf-8")
+		_, _ = w.Write(data)
+	})
 
 	serveIndex := func(w http.ResponseWriter, r *http.Request) {
 		f, err := distFS.Open("index.html")
@@ -106,7 +126,7 @@ func New(c config.Config) http.Handler {
 			filename = path[idx+1:]
 		}
 
-		if filename == "openapi.json" || filename == "swagger.json" || filename == "config.json" {
+		if filename == "openapi.json" || filename == "swagger.json" || filename == "config.json" || filename == "i18n.json" {
 			r2 := r.Clone(r.Context())
 			r2.URL.Path = "/" + filename
 			mux.ServeHTTP(w, r2)

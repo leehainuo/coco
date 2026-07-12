@@ -2,12 +2,17 @@
  * 国际化消息定义
  */
 
-import type { Locale } from '../types'
+import { reactive } from 'vue'
 
-export type MessageKey = keyof typeof messages.zh
+export type MessageKey = keyof typeof builtinMessages.zh
 
-export const messages: Record<Locale, Record<string, string>> = {
+/**
+ * Built-in translations. Custom languages are registered at runtime via
+ * a user-provided i18n.json file (see registerCustomMessages).
+ */
+export const builtinMessages = {
   zh: {
+    language: '语言',
     search: '搜索',
     noResults: '未找到匹配的接口',
     loading: '加载中...',
@@ -75,6 +80,7 @@ export const messages: Record<Locale, Record<string, string>> = {
     formDataParam: 'form-data 参数',
   },
   en: {
+    language: 'Language',
     search: 'Search',
     noResults: 'No matching APIs',
     loading: 'Loading...',
@@ -141,4 +147,35 @@ export const messages: Record<Locale, Record<string, string>> = {
     selectFile: 'Select file',
     formDataParam: 'form-data params',
   },
+}
+
+/**
+ * The display name shown in the language switcher for the custom language.
+ * Populated from the "name" field of the user-provided i18n.json.
+ */
+export const customLanguageName = reactive({ value: '' })
+
+/**
+ * Runtime translation registry: built-in languages plus an optional
+ * custom language registered from i18n.json.
+ */
+export const messages: Record<string, Record<string, string>> = reactive({
+  zh: builtinMessages.zh,
+  en: builtinMessages.en,
+})
+
+/**
+ * Register a custom language from a parsed i18n.json payload.
+ * Shape: { name: string, messages: Record<string, string> }.
+ * Returns true when a usable message table was registered.
+ */
+export function registerCustomMessages(payload: unknown): boolean {
+  if (!payload || typeof payload !== 'object') return false
+
+  const { name, messages: table } = payload as { name?: unknown; messages?: unknown }
+  if (!table || typeof table !== 'object') return false
+
+  messages.custom = table as Record<string, string>
+  customLanguageName.value = typeof name === 'string' && name.trim() ? name.trim() : 'Custom'
+  return true
 }
