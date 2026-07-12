@@ -80,6 +80,89 @@ handler := coco.New("",
 
 ---
 
+### I18n
+
+从本地翻译文件注册一种自定义语言。
+
+```go
+func I18n(path string) Option
+```
+
+**参数**:
+- `path` - 翻译 JSON 文件的路径（相对或绝对）
+
+**示例**:
+```go
+handler := coco.New("./openapi.json",
+    coco.I18n("./i18n.fr.json"),
+    coco.Lang("custom"),
+)
+```
+
+**文件格式**:
+```json
+{
+  "name": "Français",
+  "messages": {
+    "search": "Recherche",
+    "loading": "Chargement..."
+  }
+}
+```
+
+**注意**: `name` 显示在语言切换器中；`messages` 是翻译键到本地化文案的映射。缺失的键会回退到英文。
+
+---
+
+### I18nData
+
+从内存字节数组注册一种自定义语言。
+
+```go
+func I18nData(data []byte) Option
+```
+
+**参数**:
+- `data` - 翻译 JSON 的字节数组
+
+**示例**:
+```go
+//go:embed i18n.fr.json
+var frI18n []byte
+
+handler := coco.New("./openapi.json",
+    coco.I18nData(frI18n),
+    coco.Lang("custom"),
+)
+```
+
+**注意**: 来源不限——embed 嵌入文件、内联 Go 字符串（`[]byte("...")`），或运行时从数据库构建的 JSON。文件格式见 [I18n](#i18n)。
+
+---
+
+### I18nURL
+
+通过从远程 URL 获取翻译文件来注册一种自定义语言。
+
+```go
+func I18nURL(url string) Option
+```
+
+**参数**:
+- `url` - 翻译文件的远程 URL
+
+**示例**:
+```go
+handler := coco.New("./openapi.json",
+    coco.I18nURL("https://cdn.example.com/i18n.fr.json"),
+    coco.Lang("custom"),
+)
+```
+
+**注意**: 文件格式见 [I18n](#i18n)。缺失的键会回退到英文。
+
+---
+
 ### Title
 
 设置文档页面的标题。
@@ -149,6 +232,7 @@ func Lang(lang string) Option
 **可选值**:
 - `"en"` - English
 - `"zh"` - 中文
+- `"custom"` - 自定义语言（需配合 `I18n` / `I18nData` / `I18nURL`）
 
 **默认值**: `"en"`
 
@@ -301,6 +385,18 @@ type Spec struct {
 }
 ```
 
+### I18n
+
+自定义翻译来源（解析优先级：字节 → URL → 文件路径）。
+
+```go
+type I18n struct {
+    I18nPath string // 文件路径
+    I18nData []byte // 字节数组
+    I18nURL  string // 远程 URL
+}
+```
+
 ### UI
 
 界面配置。
@@ -309,7 +405,8 @@ type Spec struct {
 type UI struct {
     Title string // 文档标题
     Theme string // 主题: "light", "dark", "auto"
-    Lang  string // 语言: "en", "zh"
+    Lang  string // 语言: "en", "zh", "custom"
+    I18n         // 自定义翻译来源
 }
 ```
 
@@ -370,6 +467,20 @@ handler := coco.New("",
 handler := coco.New("",
     coco.SpecURL("https://api.example.com/openapi.json"),
     coco.Title("远程 API"),
+)
+```
+
+### 使用自定义语言
+
+```go
+import _ "embed"
+
+//go:embed i18n.fr.json
+var frI18n []byte
+
+handler := coco.New("./openapi.json",
+    coco.I18nData(frI18n),
+    coco.Lang("custom"),
 )
 ```
 

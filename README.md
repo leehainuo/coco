@@ -294,8 +294,11 @@ coco.Title("My API Documentation")
 // Set theme: "light", "dark", "auto"
 coco.Theme("dark")
 
-// Set language: "en", "zh"
+// Set language: "en", "zh", "custom"
 coco.Lang("en")
+
+// Add a custom language from a translation file (optional)
+coco.I18n("./i18n.fr.json")
 ```
 
 ### Feature Toggles
@@ -400,8 +403,13 @@ swag init
 
 - `en` - English (default)
 - `zh` - Chinese
+- `custom` - A custom language loaded from your own `i18n.json`
 
 Users can switch themes and languages anytime in the top-right corner of the interface.
+
+To add a language beyond the built-in English and Chinese, provide a translation
+file via `coco.I18n` (file), `coco.I18nData` (bytes) or `coco.I18nURL` (URL), then
+select it with `coco.Lang("custom")`. See the [Configuration Guide](./docs/en/02-configuration.md) for details.
 
 ## Documentation
 

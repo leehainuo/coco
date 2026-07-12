@@ -80,6 +80,89 @@ handler := coco.New("",
 
 ---
 
+### I18n
+
+Register a custom language from a local translation file.
+
+```go
+func I18n(path string) Option
+```
+
+**Parameters**:
+- `path` - Path to the translation JSON file (relative or absolute)
+
+**Example**:
+```go
+handler := coco.New("./openapi.json",
+    coco.I18n("./i18n.fr.json"),
+    coco.Lang("custom"),
+)
+```
+
+**File format**:
+```json
+{
+  "name": "Français",
+  "messages": {
+    "search": "Recherche",
+    "loading": "Chargement..."
+  }
+}
+```
+
+**Note**: `name` is shown in the language switcher; `messages` maps translation keys to localized strings. Missing keys fall back to English.
+
+---
+
+### I18nData
+
+Register a custom language from an in-memory byte array.
+
+```go
+func I18nData(data []byte) Option
+```
+
+**Parameters**:
+- `data` - Translation JSON as a byte array
+
+**Example**:
+```go
+//go:embed i18n.fr.json
+var frI18n []byte
+
+handler := coco.New("./openapi.json",
+    coco.I18nData(frI18n),
+    coco.Lang("custom"),
+)
+```
+
+**Note**: The source is arbitrary — embedded files, an inline Go string (`[]byte("...")`), or JSON built at runtime from a database. See the file format under [I18n](#i18n).
+
+---
+
+### I18nURL
+
+Register a custom language by fetching a translation file from a remote URL.
+
+```go
+func I18nURL(url string) Option
+```
+
+**Parameters**:
+- `url` - Remote URL of the translation file
+
+**Example**:
+```go
+handler := coco.New("./openapi.json",
+    coco.I18nURL("https://cdn.example.com/i18n.fr.json"),
+    coco.Lang("custom"),
+)
+```
+
+**Note**: See the file format under [I18n](#i18n). Missing keys fall back to English.
+
+---
+
 ### Title
 
 Set the documentation page title.
@@ -149,6 +232,7 @@ func Lang(lang string) Option
 **Available values**:
 - `"en"` - English
 - `"zh"` - Chinese
+- `"custom"` - Custom language (requires `I18n` / `I18nData` / `I18nURL`)
 
 **Default**: `"en"`
 
@@ -301,6 +385,18 @@ type Spec struct {
 }
 ```
 
+### I18n
+
+Custom translation source (resolved: bytes, then URL, then file path).
+
+```go
+type I18n struct {
+    I18nPath string // File path
+    I18nData []byte // Byte array
+    I18nURL  string // Remote URL
+}
+```
+
 ### UI
 
 UI configuration.
@@ -309,7 +405,8 @@ UI configuration.
 type UI struct {
     Title string // Document title
     Theme string // Theme: "light", "dark", "auto"
-    Lang  string // Language: "en", "zh"
+    Lang  string // Language: "en", "zh", "custom"
+    I18n         // Custom translation source
 }
 ```
 
@@ -370,6 +467,20 @@ handler := coco.New("",
 handler := coco.New("",
     coco.SpecURL("https://api.example.com/openapi.json"),
     coco.Title("Remote API"),
+)
+```
+
+### Using a Custom Language
+
+```go
+import _ "embed"
+
+//go:embed i18n.fr.json
+var frI18n []byte
+
+handler := coco.New("./openapi.json",
+    coco.I18nData(frI18n),
+    coco.Lang("custom"),
 )
 ```
 
