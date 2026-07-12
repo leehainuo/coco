@@ -70,7 +70,7 @@ import { ApiDetail } from '@/features/api-detail'
 import { SettingsPage } from '@/features/settings'
 import { MenuIcon } from '@/shared/components/icons'
 import { useLocale } from '@/shared/hooks'
-import type { OpenAPISpec, Endpoint, Tag } from '@/shared/types'
+import type { OpenAPISpec, Endpoint, Tag, Locale } from '@/shared/types'
 import darkBg from '@/assets/dark-bg.webp'
 import lightBg from '@/assets/light-bg.webp'
 
@@ -183,11 +183,15 @@ onMounted(async () => {
       fetch(url('i18n.json')).catch(() => null),
       fetch(url('openapi.json')),
     ])
+    // Desired initial language from config.json; applied after any custom
+    // language is registered so that Lang("custom") can take effect.
+    let initialLang: string | null = null
+
     if (cfg?.ok) {
       try {
         const c = await cfg.json()
         if (c.title) document.title = c.title
-        if (c.lang && !localStorage.getItem('coco:lang')) setLocale(c.lang, false)
+        if (c.lang) initialLang = c.lang
         config.value.enableDebug = c.enableDebug ?? true
         config.value.enableExport = c.enableExport ?? true
         config.value.enableHistory = c.enableHistory ?? true
@@ -205,10 +209,22 @@ onMounted(async () => {
     }
     if (i18nRes?.ok) {
       try {
-        const registered = loadCustomMessages(await i18nRes.json())
-        if (registered && localStorage.getItem('coco:lang') === 'custom') setLocale('custom', false)
+        loadCustomMessages(await i18nRes.json())
       } catch {
         // Ignore malformed i18n.json; fall back to built-in languages.
+      }
+    }
+
+    // Reconcile the active language now that any custom language has been
+    // registered. A persisted user choice wins over the configured initial
+    // language. In both cases, if "custom" is requested but no valid
+    // i18n.json is available, gracefully fall back to English.
+    const wanted = (localStorage.getItem('coco:lang') as Locale | null) ?? (initialLang as Locale | null)
+    if (wanted) {
+      if (wanted === 'custom' && !hasCustom.value) {
+        setLocale('en', false)
+      } else {
+        setLocale(wanted, false)
       }
     }
     if (!s.ok) throw new Error(`HTTP ${s.status}`)
