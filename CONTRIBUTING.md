@@ -86,7 +86,7 @@ Found a bug? Please submit an **issue** with:
 
 CI checks the Go library on Go 1.21 and the current stable release, the frontend on
 Node.js 22, and the independent `example/` module using its own `go.mod`. See
-[repository maintenance](.github/README.md) for the complete local checks and release process.
+[repository maintenance](.github/MAINTAINING.md) for the complete local checks and release process.
 Use `npm ci` to install the locked frontend dependencies. Frontend changes must
 include rebuilt `internal/assets/dist/` files because Go users consume those embedded assets.
 
