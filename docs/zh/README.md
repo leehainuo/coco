@@ -28,24 +28,23 @@
 
 Coco 是一个**优雅、轻量、美观**的 Go 库，用于将 OpenAPI/Swagger 规范渲染为精美的交互式 API 文档。零依赖设计，单文件打包，完美嵌入 Go 二进制文件。支持 OpenAPI 2.0 和 3.0+ 规范，可无缝集成到任何 Go Web 框架。
 
-
 #### Coco 的优势：
 
-* **优雅的DX** - 极简的 API 设计，最快 30 秒完成集成
-* **精美的UI** - 基于 Vue 3 + TailwindCSS 构建，支持亮/暗主题自动切换
-* **框架无关** - 所有 Go Web 框架（Gin、Echo、Fiber、Chi、net/http 等）可用
-* **功能齐全** - 内置 API 调试、规范导出、请求历史、国际化等功能
+- **优雅的DX** - 极简的 API 设计，最快 30 秒完成集成
+- **精美的UI** - 基于 Vue 3 + TailwindCSS 构建，支持亮/暗主题自动切换
+- **框架无关** - 所有 Go Web 框架（Gin、Echo、Fiber、Chi、net/http 等）可用
+- **功能齐全** - 内置 API 调试、规范导出、请求历史、国际化等功能
 
 ## 核心特性
 
-* **国际化支持** - 内置中英文，可扩展更多语言
-* **零依赖** - 纯 Go 实现，前端资源完全嵌入，无需任何外部工具
-* **框架无关** - 兼容所有 Go Web 框架（Gin、Echo、Fiber、Chi、net/http 等）
-* **灵活配置** - 丰富的配置选项，满足各种定制需求
-* **API 调试** - 内置交互式调试面板，即时测试 API 接口
-* **规范导出** - 一键导出 OpenAPI/Swagger 规范文件
-* **请求历史** - 自动保存调试历史，方便回顾和重用
-* **高性能** - 嵌入式静态资源，单文件打包，无额外 HTTP 请求
+- **国际化支持** - 内置中英文，可扩展更多语言
+- **零依赖** - 纯 Go 实现，前端资源完全嵌入，无需任何外部工具
+- **框架无关** - 兼容所有 Go Web 框架（Gin、Echo、Fiber、Chi、net/http 等）
+- **灵活配置** - 丰富的配置选项，满足各种定制需求
+- **API 调试** - 内置交互式调试面板，即时测试 API 接口
+- **规范导出** - 一键导出 OpenAPI/Swagger 规范文件
+- **请求历史** - 自动保存调试历史，方便回顾和重用
+- **高性能** - 嵌入式静态资源，单文件打包，无额外 HTTP 请求
 
 ## 安装
 
@@ -115,23 +114,26 @@ go run main.go
 
 **第四步：访问文档**
 
-打开浏览器访问 http://localhost:8000/docs/ 即可看到精美的 API 文档！
+打开浏览器访问 <http://localhost:8000/docs/> 即可看到精美的 API 文档！
 
----
+***
 
 ### 其他使用方式
 
 **从本地文件加载**
+
 ```go
 handler := coco.New("./openapi.json")
 ```
 
 **从 URL 加载**
+
 ```go
 handler := coco.New("", coco.SpecURL("https://example.com/openapi.json"))
 ```
 
 **从字节数组加载**
+
 ```go
 handler := coco.New("", coco.Spec(specBytes))
 ```
@@ -389,6 +391,7 @@ func main() {
 ```
 
 运行前需要生成文档：
+
 ```bash
 swag init
 ```
@@ -413,26 +416,20 @@ swag init
 或 `coco.I18nURL`（URL）提供翻译文件，再用 `coco.Lang("custom")` 选中它。详见
 [配置指南](./02-configuration.md)。
 
-## 完整示例
-
-查看 [example/framework](../example/framework) 目录获取更多完整示例：
-
-- **net/http** - 原生标准库示例
-- **Gin** - Gin 框架集成
-- **Echo** - Echo 框架集成
-- **Fiber** - Fiber v3 框架集成
-- **Chi** - Chi 路由器集成
-
-每个框架都提供了 Huma 和 Swag 两种 OpenAPI 生成方式的示例。
-
 ## 文档
 
-* [快速入门指南](./01-getting-started.md)
-* [配置指南](./02-configuration.md)
-* [框架集成示例](./03-framework-integration.md)
-* [OpenAPI 生成指南](./04-openapi-generation.md)
-* [API 参考](./05-api-reference.md)
-* [完整示例代码](../example/framework)
+- [快速入门指南](./01-getting-started.md)
+- [配置指南](./02-configuration.md)
+- [框架集成指南](./03-framework-integration.md)
+- [OpenAPI 生成指南](./04-openapi-generation.md)
+- [API 参考](./05-api-reference.md)
+- [文档首页 / Documentation Home](../README.md)
+- [English](../../README.md)
+
+## 完整示例
+
+- [基础示例](../../example/basic/)：远程规范、嵌入式规范、本地规范、net/http 和自定义语言。
+- [框架示例](../../example/framework/)：net/http、Gin、Echo、Fiber v3 和 Chi，每个框架均包含 Huma 和 Swag 两种集成方式。
 
 ## 贡献
 
@@ -442,12 +439,12 @@ swag init
 
 ## 许可证
 
-MIT License - 详见 [LICENSE](LICENSE) 文件
+MIT License - 详见 [LICENSE](../../LICENSE) 文件
 
 ## 给个 Star！⭐
 
 如果你喜欢这个项目，或者正在使用它来学习或构建你的解决方案，请给它一个 Star 以获取新版本的更新通知。你的支持很重要！
 
----
+***
 
-**Made with ❤️ by [leehainuo](https://github.com/leehainuo)**
+**Made with ❤️ by** **[leehainuo](https://github.com/leehainuo)**

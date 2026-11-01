@@ -88,7 +88,6 @@ coco/
     │   ├── 04-openapi-generation.md
     │   └── 05-api-reference.md
     └── en/                # English detailed guides
-        ├── CONTRIBUTING.md
         ├── 01-getting-started.md
         ├── 02-configuration.md
         ├── 03-framework-integration.md

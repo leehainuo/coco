@@ -7,6 +7,7 @@
 - **Go:** Go 1.21 compatibility and the current stable release; vet, race tests, coverage, and build.
 - **Frontend:** Node.js 22, `npm ci`, Prettier, TypeScript, production build, then Go tests with fresh embedded assets.
 - **Examples:** dependencies, vet, race tests, and build using `example/go.mod`.
+- **Documentation:** validate local Markdown links, image paths, and heading anchors with Node.js 22. External URLs are not requested.
 - **CI passed:** a stable aggregate check for branch protection. Require this check rather than version-specific matrix job names.
 
 Actions are pinned to commit SHAs and receive Dependabot updates. Workflows use a
@@ -44,6 +45,7 @@ means maintainer-authored PRs need the administrator's explicit bypass to merge.
 
 ```sh
 # Repository root
+node .github/scripts/check-doc-links.mjs
 go vet ./...
 go test -race -count=1 ./...
 go build ./...

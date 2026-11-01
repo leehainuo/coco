@@ -30,21 +30,21 @@ Coco is an elegant, lightweight, and beautiful Go library that renders OpenAPI/S
 
 #### Advantages of Coco:
 
-* **Elegant DX** - Minimal API design, integrate in just 30 seconds
-* **Beautiful UI** - Built with Vue 3 + TailwindCSS, supports automatic light/dark theme switching
-* **Framework Agnostic** - Works with all Go web frameworks (Gin, Echo, Fiber, Chi, net/http, etc.)
-* **Feature Complete** - Built-in API testing, spec export, request history, internationalization, and more
+- **Elegant DX** - Minimal API design, integrate in just 30 seconds
+- **Beautiful UI** - Built with Vue 3 + TailwindCSS, supports automatic light/dark theme switching
+- **Framework Agnostic** - Works with all Go web frameworks (Gin, Echo, Fiber, Chi, net/http, etc.)
+- **Feature Complete** - Built-in API testing, spec export, request history, internationalization, and more
 
 ## Core Features
 
-* **Internationalization** - Built-in English and Chinese support, extensible for more languages
-* **Zero Dependencies** - Pure Go implementation, frontend assets fully embedded, no external tools required
-* **Framework Agnostic** - Compatible with all Go web frameworks (Gin, Echo, Fiber, Chi, net/http, etc.)
-* **Flexible Configuration** - Rich configuration options to meet various customization needs
-* **API Testing** - Built-in interactive debug panel for instant API testing
-* **Spec Export** - One-click export of OpenAPI/Swagger specification files
-* **Request History** - Automatically saves debug history for easy review and reuse
-* **High Performance** - Embedded static assets, single-file bundle, no additional HTTP requests
+- **Internationalization** - Built-in English and Chinese support, extensible for more languages
+- **Zero Dependencies** - Pure Go implementation, frontend assets fully embedded, no external tools required
+- **Framework Agnostic** - Compatible with all Go web frameworks (Gin, Echo, Fiber, Chi, net/http, etc.)
+- **Flexible Configuration** - Rich configuration options to meet various customization needs
+- **API Testing** - Built-in interactive debug panel for instant API testing
+- **Spec Export** - One-click export of OpenAPI/Swagger specification files
+- **Request History** - Automatically saves debug history for easy review and reuse
+- **High Performance** - Embedded static assets, single-file bundle, no additional HTTP requests
 
 ## Installation
 
@@ -114,28 +114,31 @@ go run main.go
 
 **Step 4: View your docs**
 
-Open your browser and visit http://localhost:8000/docs/ to see your beautiful API documentation!
+Open your browser and visit <http://localhost:8000/docs/> to see your beautiful API documentation!
 
----
+***
 
 ### Other Usage Methods
 
 **Load from local file**
+
 ```go
 handler := coco.New("./openapi.json")
 ```
 
 **Load from URL**
+
 ```go
 handler := coco.New("", coco.SpecURL("https://example.com/openapi.json"))
 ```
 
 **Load from byte array**
+
 ```go
 handler := coco.New("", coco.Spec(specBytes))
 ```
 
-**For more configuration and integration options, see [Full Documentation](./docs/en/)**
+**For more configuration and integration options, see** **[Full Documentation](./docs/en/)**
 
 ## Integration Examples
 
@@ -388,6 +391,7 @@ func main() {
 ```
 
 Generate documentation before running:
+
 ```bash
 swag init
 ```
@@ -414,28 +418,20 @@ select it with `coco.Lang("custom")`. See the [Configuration Guide](./docs/en/02
 
 ## Documentation
 
-- **English Docs**: [docs/en/](./docs/en/) - Complete English documentation
-- **中文文档**: [docs/zh/](./docs/zh/) - 完整的中文使用指南
-- **Documentation Home**: [docs/](./docs/) - Choose your language / 选择你的语言
+- [Quick Start Guide](./docs/en/01-getting-started.md)
+- [Configuration Guide](./docs/en/02-configuration.md)
+- [Framework Integration Guide](./docs/en/03-framework-integration.md)
+- [OpenAPI Generation Guide](./docs/en/04-openapi-generation.md)
+- [API Reference](./docs/en/05-api-reference.md)
+- [Documentation Home / 文档首页](./docs/README.md)
+- [简体中文](./docs/zh/README.md)
 
 ## Complete Examples
 
-Check the [example/framework](./example/framework) directory for complete examples:
+- [Basic examples](./example/basic/): remote, embedded, and local specifications, net/http, and custom languages.
+- [Framework examples](./example/framework/): net/http, Gin, Echo, Fiber v3, and Chi, each with Huma and Swag integrations.
 
-- **net/http** - Standard library examples
-- **Gin** - Gin framework integration
-- **Echo** - Echo framework integration
-- **Fiber** - Fiber v3 framework integration
-- **Chi** - Chi router integration
-
-Each framework provides examples for both Huma and Swag OpenAPI generation methods.
-
-## 📚 Documentation
-
-- **English**: [docs/en/](./docs/en/)
-- **中文**: [docs/zh/](./docs/zh/)
-
-## 🤝 Contributing
+## Contributing
 
 Contributions, issues, and suggestions are welcome!
 
@@ -449,6 +445,6 @@ MIT License - See [LICENSE](LICENSE) file for details
 
 If you like this project or are using it to learn or build your solution, please give it a Star to get updates on new releases. Your support matters!
 
----
+***
 
-**Made with ❤️ by [leehainuo](https://github.com/leehainuo)**
+**Made with ❤️ by** **[leehainuo](https://github.com/leehainuo)**

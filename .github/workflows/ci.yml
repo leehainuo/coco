@@ -15,6 +15,20 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  docs:
+    name: Documentation
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '22'
+      - name: Check local documentation links and anchors
+        run: node .github/scripts/check-doc-links.mjs
+
   go:
     name: Go (${{ matrix.go }})
     runs-on: ubuntu-latest
@@ -107,16 +121,18 @@ jobs:
   ci:
     name: CI passed
     if: always()
-    needs: [go, frontend, examples]
+    needs: [docs, go, frontend, examples]
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
       - name: Require all jobs to succeed
         env:
+          DOCS_RESULT: ${{ needs.docs.result }}
           GO_RESULT: ${{ needs.go.result }}
           FRONTEND_RESULT: ${{ needs.frontend.result }}
           EXAMPLES_RESULT: ${{ needs.examples.result }}
         run: |
+          test "$DOCS_RESULT" = success
           test "$GO_RESULT" = success
           test "$FRONTEND_RESULT" = success
           test "$EXAMPLES_RESULT" = success

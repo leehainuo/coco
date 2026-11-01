@@ -426,7 +426,7 @@ authorized.Any("/*any", gin.WrapH(handler))
 
 ## 完整示例
 
-查看 [example/framework](../example/framework) 目录获取每个框架的完整可运行示例：
+查看 [example/framework](../../example/framework/) 目录获取每个框架的完整可运行示例：
 
 - `nethttp/` - net/http 标准库
 - `gin/` - Gin 框架

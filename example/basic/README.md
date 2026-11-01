@@ -85,10 +85,10 @@ go run main.go
 ```
 
 **访问：**
-- 文档：http://localhost:8000/docs/
+- 文档：http://localhost:8082/docs/
 - API：
-  - http://localhost:8000/api/health
-  - http://localhost:8000/api/users
+  - http://localhost:8082/api/health
+  - http://localhost:8082/api/users
 
 ---
 
@@ -162,7 +162,9 @@ example/basic/
 │       ├── openapi.json
 │       └── i18n.json
 ├── pkg/                 # 共享的 API 实现
-│   └── api.go
+│   ├── model.go
+│   ├── router.go
+│   └── utils.go
 └── README.md
 ```
 
@@ -195,7 +197,7 @@ cd cmd/i18n && go run main.go
 
 ## 注意事项
 
-- 每个示例使用不同的端口，可以同时运行多个示例
+- 除 net/http 示例使用 8082 端口外，其余示例均使用 8000 端口；使用相同端口的示例不能同时运行
 - Remote 示例需要网络连接来获取 Petstore API 规范
 - Embedded 和 Local 示例使用相同的 `openapi.json` 文件
 - 所有示例都展示了 Coco 的零配置、自动路径检测特性
