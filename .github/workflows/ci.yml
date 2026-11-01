@@ -1,0 +1,122 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  go:
+    name: Go (${{ matrix.go }})
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    strategy:
+      fail-fast: false
+      matrix:
+        go: ['1.21.x', stable]
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6
+        with:
+          go-version: ${{ matrix.go }}
+          # The root module has no external dependencies or go.sum.
+          cache: false
+      - name: Check Go formatting
+        if: matrix.go == 'stable'
+        shell: bash
+        run: |
+          unformatted=$(git ls-files '*.go' | xargs gofmt -l)
+          if [ -n "$unformatted" ]; then
+            printf '%s\n' "$unformatted"
+            exit 1
+          fi
+      - name: Vet
+        run: go vet ./...
+      - name: Test with race detector
+        run: go test -race -count=1 -cover ./...
+      - name: Build library
+        run: go build ./...
+
+  frontend:
+    name: Frontend
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6
+        with:
+          node-version: '22'
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - name: Install dependencies
+        run: npm ci
+      - name: Check formatting
+        run: npm run format:check
+      - name: Check types
+        run: npm run type-check
+      - name: Build embedded frontend
+        run: npm run build
+      - uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6
+        with:
+          go-version: stable
+          cache: false
+      - name: Test library with freshly built assets
+        working-directory: .
+        run: go test ./...
+
+  examples:
+    name: Examples
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: example
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-go@924ae3a1cded613372ab5595356fb5720e22ba16 # v6
+        with:
+          go-version-file: example/go.mod
+          cache-dependency-path: example/go.sum
+      - name: Verify dependencies
+        run: go mod download && go mod verify
+      - name: Vet examples
+        run: go vet ./...
+      - name: Test examples
+        run: go test -race -count=1 ./...
+      - name: Build examples
+        run: go build ./...
+
+  ci:
+    name: CI passed
+    if: always()
+    needs: [go, frontend, examples]
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Require all jobs to succeed
+        env:
+          GO_RESULT: ${{ needs.go.result }}
+          FRONTEND_RESULT: ${{ needs.frontend.result }}
+          EXAMPLES_RESULT: ${{ needs.examples.result }}
+        run: |
+          test "$GO_RESULT" = success
+          test "$FRONTEND_RESULT" = success
+          test "$EXAMPLES_RESULT" = success

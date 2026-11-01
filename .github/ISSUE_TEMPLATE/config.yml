@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Documentation / 使用文档
+    url: https://github.com/leehainuo/coco/blob/main/docs/README.md
+    about: Read the setup and configuration guides / 查看安装和配置指南
+  - name: Security policy / 安全问题
+    url: https://github.com/leehainuo/coco/blob/main/SECURITY.md
+    about: Report vulnerabilities privately / 私下报告安全漏洞
