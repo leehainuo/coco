@@ -33,10 +33,12 @@ publish a GitHub Release. Use **Generate release notes** to apply the categories
 The default branch is `main`. Enable branch update suggestions and automatic
 deletion of merged branches. Protect `main` with pull requests, the `CI passed`
 status check, resolved review conversations, and no force pushes or deletions.
-For a single-maintainer project, do not require another person's approval count.
+The existing `Protect main` ruleset also requires one approval, code-owner review,
+linear history, and squash merging; repository administrators have an existing bypass.
 
 GitHub settings are stored on GitHub; these files do not apply settings by themselves.
-`CODEOWNERS` requests review from `@leehainuo` but does not require an owner approval.
+`CODEOWNERS` requests review from `@leehainuo`. The existing code-owner review rule
+means maintainer-authored PRs need the administrator's explicit bypass to merge.
 
 ## 本地检查
 
