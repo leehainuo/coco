@@ -1,0 +1,45 @@
+name: Bug report / 问题反馈
+description: Report a reproducible problem in Coco / 反馈可复现的问题
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        English and Chinese are both welcome. Please search existing issues first.
+        欢迎使用中文或英文。请先搜索已有 Issue，避免重复反馈。
+        For security vulnerabilities, see SECURITY.md instead of posting details here.
+  - type: input
+    id: version
+    attributes:
+      label: Coco version / 版本
+      placeholder: Tag or commit SHA / 标签或提交 SHA
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment / 运行环境
+      description: Go version, OS, browser version, web framework, and OpenAPI version.
+      placeholder: Go 1.x, Linux/macOS/Windows, Chrome/Firefox/Safari, net/http/Gin/Echo/Fiber/Chi, OpenAPI 2/3
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Reproduction / 复现步骤
+      description: Include a minimal Go example and OpenAPI document when relevant. Remove credentials and private data.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior / 预期行为
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior / 实际行为
+      description: Include relevant logs or screenshots if available.
+    validations:
+      required: true

@@ -9,6 +9,7 @@
 <div align="center">
 
 [![Go Version](https://img.shields.io/badge/Go-%3E%3D%201.21-blue)](https://go.dev/)
+[![CI](https://github.com/leehainuo/coco/actions/workflows/ci.yml/badge.svg)](https://github.com/leehainuo/coco/actions/workflows/ci.yml)
 [![Go Reference](https://pkg.go.dev/badge/github.com/leehainuo/coco.svg)](https://pkg.go.dev/github.com/leehainuo/coco)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 

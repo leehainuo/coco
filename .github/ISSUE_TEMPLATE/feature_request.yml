@@ -1,0 +1,29 @@
+name: Feature request / 功能建议
+description: Suggest an improvement to Coco / 提出改进建议
+labels: [enhancement]
+body:
+  - type: markdown
+    attributes:
+      value: English and Chinese are both welcome. / 欢迎使用中文或英文。
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem or use case / 问题或使用场景
+      description: Describe the need behind this request.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed solution / 建议方案
+      description: Describe the API or UI behavior you would like to see.
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives / 替代方案
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context / 补充信息
