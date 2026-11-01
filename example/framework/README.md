@@ -95,7 +95,7 @@ go run main.go
 #### Gin + Swag
 ```bash
 cd gin/swag
-go install github.com/swaggo/swag/cmd/swag@latest
+go install github.com/swaggo/swag/cmd/swag@v1.16.6
 swag init
 go run main.go
 ```
@@ -192,7 +192,7 @@ go get github.com/go-chi/chi/v5
 
 ```bash
 # 安装 swag CLI
-go install github.com/swaggo/swag/cmd/swag@latest
+go install github.com/swaggo/swag/cmd/swag@v1.16.6
 
 # 各框架依赖（net/http 是标准库，无需额外安装）
 go get github.com/gin-gonic/gin
