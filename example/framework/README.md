@@ -54,6 +54,15 @@ framework/
 
 ## 🚀 快速开始
 
+以下命令均从 `example/framework/` 目录开始，每次选择一个示例运行。
+框架示例共用 `example/go.mod`，需要该文件声明的 Go 版本；Coco 库本身仍支持 Go 1.21。
+所有框架示例默认监听 8000 端口，请勿同时启动多个示例。
+Swag 示例已包含生成的规范；需要重新生成时，先安装 Swag CLI 并确保其位于 `PATH` 中：
+
+```bash
+go install github.com/swaggo/swag/cmd/swag@v1.16.6
+```
+
 ### 0. net/http 原生标准库
 
 #### net/http + Huma
@@ -66,7 +75,7 @@ go run main.go
 #### net/http + Swag
 ```bash
 cd nethttp/swag
-~/go/bin/swag init
+swag init
 go run main.go
 ```
 

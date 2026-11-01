@@ -418,32 +418,18 @@ select it with `coco.Lang("custom")`. See the [Configuration Guide](./docs/en/02
 
 ## Documentation
 
-- **English Docs**: [docs/en/](./docs/en/) - Complete English documentation
-- **中文文档**: [docs/zh/](./docs/zh/) - 完整的中文使用指南
-- **Documentation Home**: [docs/](./docs/) - Choose your language / 选择你的语言
+- [Quick Start Guide](./docs/en/01-getting-started.md)
+- [Configuration Guide](./docs/en/02-configuration.md)
+- [Framework Integration Guide](./docs/en/03-framework-integration.md)
+- [OpenAPI Generation Guide](./docs/en/04-openapi-generation.md)
+- [API Reference](./docs/en/05-api-reference.md)
+- [Documentation Home / 文档首页](./docs/README.md)
+- [简体中文](./docs/zh/README.md)
 
 ## Complete Examples
 
-Check the [example/framework](./example/framework) directory for complete examples:
-
-- **net/http** - Standard library examples
-- **Gin** - Gin framework integration
-- **Echo** - Echo framework integration
-- **Fiber** - Fiber v3 framework integration
-- **Chi** - Chi router integration
-
-Each framework provides examples for both Huma and Swag OpenAPI generation methods.
-
-<br />
-
-## Document
-
-- [Quick Start Guide](https://github.com/leehainuo/coco/blob/main/docs/zh/01-getting-started.md)
-- [Configuration Guide](https://github.com/leehainuo/coco/blob/main/docs/zh/02-configuration.md)
-- [Framework Integration Examples](https://github.com/leehainuo/coco/blob/main/docs/zh/03-framework-integration.md)
-- [OpenAPI Generation Guide](https://github.com/leehainuo/coco/blob/main/docs/zh/04-openapi-generation.md)
-- [API Reference](https://github.com/leehainuo/coco/blob/main/docs/zh/05-api-reference.md)
-- [Full Example Code](https://github.com/leehainuo/coco/blob/main/docs/example/framework)
+- [Basic examples](./example/basic/): remote, embedded, and local specifications, net/http, and custom languages.
+- [Framework examples](./example/framework/): net/http, Gin, Echo, Fiber v3, and Chi, each with Huma and Swag integrations.
 
 ## Contributing
 

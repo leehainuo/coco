@@ -416,34 +416,20 @@ swag init
 或 `coco.I18nURL`（URL）提供翻译文件，再用 `coco.Lang("custom")` 选中它。详见
 [配置指南](./02-configuration.md)。
 
-<br />
-
-## 文献资料
-
-- **英文文档**：[docs/en/](https://github.com/leehainuo/coco/blob/main/docs/en) - 完整的英文文档
-- 中文文档： [docs/zh/](https://github.com/leehainuo/coco/blob/main/docs/zh) - 完整的中文使用指南
-- **文档首页**：[docs/](https://github.com/leehainuo/coco/blob/main/docs) - 选择你的语言 / 选择你的语言
-
-## 完整示例
-
-查看 [example/framework](../example/framework) 目录获取更多完整示例：
-
-- **net/http** - 原生标准库示例
-- **Gin** - Gin 框架集成
-- **Echo** - Echo 框架集成
-- **Fiber** - Fiber v3 框架集成
-- **Chi** - Chi 路由器集成
-
-每个框架都提供了 Huma 和 Swag 两种 OpenAPI 生成方式的示例。
-
 ## 文档
 
 - [快速入门指南](./01-getting-started.md)
 - [配置指南](./02-configuration.md)
-- [框架集成示例](./03-framework-integration.md)
+- [框架集成指南](./03-framework-integration.md)
 - [OpenAPI 生成指南](./04-openapi-generation.md)
 - [API 参考](./05-api-reference.md)
-- [完整示例代码](../example/framework)
+- [文档首页 / Documentation Home](../README.md)
+- [English](../../README.md)
+
+## 完整示例
+
+- [基础示例](../../example/basic/)：远程规范、嵌入式规范、本地规范、net/http 和自定义语言。
+- [框架示例](../../example/framework/)：net/http、Gin、Echo、Fiber v3 和 Chi，每个框架均包含 Huma 和 Swag 两种集成方式。
 
 ## 贡献
 
@@ -453,7 +439,7 @@ swag init
 
 ## 许可证
 
-MIT License - 详见 [LICENSE](LICENSE) 文件
+MIT License - 详见 [LICENSE](../../LICENSE) 文件
 
 ## 给个 Star！⭐
 
