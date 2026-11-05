@@ -7,7 +7,7 @@ replace github.com/leehainuo/coco => ../
 require (
 	github.com/danielgtaylor/huma/v2 v2.38.0
 	github.com/gin-gonic/gin v1.12.0
-	github.com/go-chi/chi/v5 v5.2.5
+	github.com/go-chi/chi/v5 v5.4.0
 	github.com/gofiber/fiber/v3 v3.2.0
 	github.com/labstack/echo/v4 v4.15.2
 	github.com/leehainuo/coco v0.0.0-00010101000000-000000000000
